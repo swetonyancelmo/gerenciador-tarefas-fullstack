@@ -120,10 +120,3 @@ Exemplo de resposta:
 - Se for iniciar a aplicação em produção, recomendo adicionar scripts npm (`dev`, `start`, `build`) e usar `tsc` para compilar antes de rodar com `node`.
 - Habilite logs adicionais ou use um process manager (pm2) para deploy.
 
----
-
-Se quiser, eu posso:
-
-- adicionar scripts úteis no `package.json` (`dev`, `migrate`, `prisma:generate`);
-- adicionar um small `Makefile` ou `npm run` scripts para facilitar execução;
-- criar testes básicos para os endpoints.
