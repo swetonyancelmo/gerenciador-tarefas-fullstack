@@ -54,10 +54,8 @@ Abra o frontend no navegador (o Vite mostrará o endereço, por exemplo `http://
 - O projeto foi preparado para desenvolvimento local. Para produção, adapte `DATABASE_URL` e processos de build/deploy.
 - O frontend atualmente referencia `http://localhost:3001` diretamente em `src/App.tsx`; recomendo mover para variável de ambiente Vite (`VITE_API_URL`).
 
-## Contato
+## Autor
 
-Se quiser, posso:
-
-- adicionar scripts `npm` úteis (dev, start, migrate) no backend;
-- ajustar variáveis de ambiente e instruções para deploy;
-- adicionar testes e/ou GitHub Actions para CI.
+**Swetony Ancelmo**
+- GitHub: [Swetony Ancelmo](https://github.com/swetonyancelmo)
+- LinkedIn: [Swetony Ancelmo](https://www.linkedin.com/in/swetony-ancelmo/?trk=opento_sprofile_details)
