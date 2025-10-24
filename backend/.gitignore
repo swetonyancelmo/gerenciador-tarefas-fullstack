@@ -1,2 +1,3 @@
 node_modules
 /src/generated/prisma
+backend/prisma/prisma/dev.db
