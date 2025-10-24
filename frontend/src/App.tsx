@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import TarefaItem from "./components/TarefaItem"
 
 interface ITarefa {
   id: number,
@@ -29,7 +30,7 @@ function App() {
   const handleAdicionarTarefa = async (evento: React.FormEvent) => {
     evento.preventDefault();
 
-    if(!novaDescricao){
+    if (!novaDescricao) {
       alert("Digite uma descrição!");
       return;
     }
@@ -43,7 +44,7 @@ function App() {
         body: JSON.stringify({ descricao: novaDescricao }),
       });
 
-      if(!resposta.ok){
+      if (!resposta.ok) {
         throw new Error('Erro ao criar tarefa');
       }
 
@@ -52,8 +53,48 @@ function App() {
       setTarefas([...tarefas, novaTarefaCriada]);
 
       setNovaDescricao('');
-    } catch(error){
+    } catch (error) {
       console.error('Erro ao adicionar tarefa: ', error);
+    }
+  }
+
+  const handleDeletarTarefa = async (id: number) => {
+    try {
+      const resposta = await fetch(`http://localhost:3001/tarefas/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!resposta.ok) {
+        throw new Error('Erro ao deletar tarefa');
+      }
+
+      setTarefas(tarefas.filter(tarefa => tarefa.id !== id));
+    } catch (error) {
+      console.error('Erro ao deletar tarefa: ', error);
+    }
+  }
+
+  const handleToggleConcluida = async (id: number, statusAtual: boolean) => {
+    try {
+      const resposta = await fetch(`http://localhost:3001/tarefas/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ concluida: !statusAtual }),
+      });
+
+      if (!resposta.ok) {
+        throw new Error('Erro ao atualizar tarefa')
+      }
+
+      const tarefaAtualizada = await resposta.json();
+
+      setTarefas(
+        tarefas.map(tarefa => tarefa.id === id ? tarefaAtualizada : tarefa)
+      )
+    } catch(error){
+      console.error('Erro ao atualizar tarefa: ', error);
     }
   }
 
@@ -69,9 +110,16 @@ function App() {
         <button type="submit">Adicionar</button>
       </form>
       <ul>
-        {tarefas.map(tarefa => (
-          <li key={tarefa.id}>{tarefa.descricao}</li>
-        ))}
+        {
+          tarefas.map(tarefa => 
+            <TarefaItem 
+              key={tarefa.id}
+              tarefa={tarefa}
+              onDelete={handleDeletarTarefa}
+              onToggle={handleToggleConcluida}
+            />
+          )
+        }
       </ul>
     </div>
   )
