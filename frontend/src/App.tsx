@@ -15,9 +15,7 @@ function App() {
     const buscarTarefas = async () => {
       try {
         const resposta = await fetch('http://localhost:3001/tarefas');
-
         const dados = await resposta.json();
-
         setTarefas(dados);
       } catch (error) {
         console.error('Erro ao buscar dados: ', error);
@@ -51,7 +49,6 @@ function App() {
       const novaTarefaCriada: ITarefa = await resposta.json();
 
       setTarefas([...tarefas, novaTarefaCriada]);
-
       setNovaDescricao('');
     } catch (error) {
       console.error('Erro ao adicionar tarefa: ', error);
@@ -64,7 +61,7 @@ function App() {
         method: 'DELETE',
       });
 
-      if (!resposta.ok) {
+      if (!resposta.ok && resposta.status !== 204) {
         throw new Error('Erro ao deletar tarefa');
       }
 
@@ -93,34 +90,51 @@ function App() {
       setTarefas(
         tarefas.map(tarefa => tarefa.id === id ? tarefaAtualizada : tarefa)
       )
-    } catch(error){
+    } catch (error) {
       console.error('Erro ao atualizar tarefa: ', error);
     }
   }
 
   return (
-    <div>
-      <h1>Minha Lista de Tarefas</h1>
-      <form onSubmit={handleAdicionarTarefa}>
-        <input
-          type="text"
-          value={novaDescricao}
-          onChange={(evento) => setNovaDescricao(evento.target.value)}
-        />
-        <button type="submit">Adicionar</button>
-      </form>
-      <ul>
-        {
-          tarefas.map(tarefa => 
-            <TarefaItem 
-              key={tarefa.id}
-              tarefa={tarefa}
-              onDelete={handleDeletarTarefa}
-              onToggle={handleToggleConcluida}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-black via-brand-purple to-brand-pink p-6">
+      <div className="relative w-full max-w-3xl">
+        <div className="absolute -left-20 -top-20 w-64 h-64 rounded-full bg-purple-900/40 blur-3xl opacity-60 pointer-events-none" />
+        <div className="absolute -right-20 -bottom-20 w-72 h-72 rounded-full bg-pink-900/30 blur-3xl opacity-60 pointer-events-none" />
+
+        <div className="relative z-10 bg-glass border border-white/6 rounded-2xl p-6 shadow-2xl">
+          <header className="mb-6">
+            <h1 className="text-3xl font-extrabold tracking-tight text-white">Lista de Tarefas</h1>
+            <p className="text-sm text-white/70 mt-1">Organize seu dia de forma elegante ✨</p>
+          </header>
+
+          <form onSubmit={handleAdicionarTarefa} className="flex gap-3 mb-6">
+            <input
+              className="flex-1 bg-white/6 placeholder-white/60 text-white rounded-lg px-4 py-3 focus:ring-0 input-focus transition-shadow duration-200 border border-white/6"
+              type="text"
+              placeholder="Adicionar nova tarefa..."
+              value={novaDescricao}
+              onChange={(evento) => setNovaDescricao(evento.target.value)}
             />
-          )
-        }
-      </ul>
+            <button
+              type="submit"
+              className="bg-brand-purple hover:bg-brand-pink text-white font-semibold px-5 py-3 rounded-lg shadow-md transition-transform active:scale-95"
+            >
+              Adicionar
+            </button>
+          </form>
+
+          <ul className="space-y-3">
+            {tarefas.map(tarefa => (
+              <TarefaItem
+                key={tarefa.id}
+                tarefa={tarefa}
+                onDelete={handleDeletarTarefa}
+                onToggle={handleToggleConcluida}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }
